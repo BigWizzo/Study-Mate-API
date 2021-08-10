@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :students
   namespace :v1 do
     resources :subjects
     resources :clockings
