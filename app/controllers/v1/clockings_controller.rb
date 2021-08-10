@@ -1,4 +1,4 @@
-class ClockingsController < ApplicationController
+class V1::ClockingsController < ApplicationController
   before_action :set_clocking, only: [:show, :update, :destroy]
 
   # GET /clockings
