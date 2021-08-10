@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
-  resources :subjects
+  namespace :v1 do
+    resources :subjects
+  end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
