@@ -1,0 +1,2 @@
+class Clocking < ApplicationRecord
+end
