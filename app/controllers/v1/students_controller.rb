@@ -4,6 +4,6 @@ class V1::StudentsController < ApplicationController
       username: params[:username],
       password: params[:password],
     )
-    render json: student
+    render json: student, status: :created
   end
 end
