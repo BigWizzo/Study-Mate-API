@@ -1,5 +1,5 @@
 class V1::SubjectsController < ApplicationController
-  before_action :set_subject, only: [:show, :update, :destroy]
+  # before_action :set_subject, only: [:show, :update, :destroy]
 
   # GET /subjects
   def index
@@ -16,9 +16,8 @@ class V1::SubjectsController < ApplicationController
   # POST /subjects
   def create
     @subject = Subject.new(subject_params)
-
     if @subject.save
-      render json: @subject, status: :created, location: @subject
+      render json: @subject, status: :created
     else
       render json: @subject.errors, status: :unprocessable_entity
     end
@@ -46,6 +45,6 @@ class V1::SubjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def subject_params
-      params.require(:subject).permit(:title, :description)
+      params.permit(:title, :description)
     end
 end

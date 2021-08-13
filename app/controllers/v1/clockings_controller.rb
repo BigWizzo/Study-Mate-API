@@ -18,7 +18,7 @@ class V1::ClockingsController < ApplicationController
     @clocking = Clocking.new(clocking_params)
 
     if @clocking.save
-      render json: @clocking, status: :created, location: @clocking
+      render json: @clocking, status: :created
     else
       render json: @clocking.errors, status: :unprocessable_entity
     end
@@ -46,6 +46,6 @@ class V1::ClockingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def clocking_params
-      params.require(:clocking).permit(:topic, :details, :duration)
+      params.permit(:topic, :details, :duration)
     end
 end
