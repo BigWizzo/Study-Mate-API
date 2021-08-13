@@ -11,10 +11,9 @@ class V1::SubjectsController < ApplicationController
 
   # GET /subjects/1
   def show
-    byebug
     if @subject.student_id == @student.id
-    @clockings = @subject.clockings.includes(:student)
-    render json: @clockings      
+      @clockings = @subject.clockings.includes(:student)
+      render json: @clockings      
     else
       render json: {message: "unauthorized"}
     end
@@ -53,7 +52,11 @@ class V1::SubjectsController < ApplicationController
 
   # DELETE /subjects/1
   def destroy
-    @subject.destroy
+    if @subject.student_id == @student.id
+     @subject.destroy
+    else
+      render json: {message: "unauthorized"}
+    end
   end
 
   private

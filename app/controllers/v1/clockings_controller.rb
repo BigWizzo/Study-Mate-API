@@ -1,20 +1,15 @@
 class V1::ClockingsController < ApplicationController
   before_action :set_clocking, only: [:show, :update, :destroy]
-  before_action :authenticate, only: [:create]
+  before_action :authenticate, only: [:create, :show, :update, :destroy]
 
-  # GET /clockings
-  def index
-    @clockings = Clocking.all
-
-    render json: @clockings
-  end
-
-  # GET /clockings/1
   def show
-    render json: @clocking
+    if @clocking.student_id == @student.id
+      render json: @clocking
+    else
+      render json: {message: "unauthorized"}
+    end
   end
 
-  # POST /clockings
   def create
     @clocking = Clocking.new(
       topic: params[:topic],
@@ -30,28 +25,35 @@ class V1::ClockingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /clockings/1
   def update
-    if @clocking.update(clocking_params)
-      render json: @clocking
+    if @clocking.student_id == @student.id
+      if @clocking.update(
+        topic: params[:topic],
+        details: params[:details],
+        duration: params[:duration],
+        subject_id: params[:subject_id],
+        student: @student
+      )
+        render json: @clocking
+      else
+        render json: @clocking.errors, status: :unprocessable_entity
+      end
     else
-      render json: @clocking.errors, status: :unprocessable_entity
+      render json: {message: "unauthorized"}
     end
   end
 
-  # DELETE /clockings/1
   def destroy
-    @clocking.destroy
+    if @clocking.student_id == @student.id
+      @clocking.destroy
+    else
+      render json: {message: "unauthorized"}
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_clocking
-      @clocking = Clocking.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def clocking_params
-      params.permit(:topic, :details, :duration)
-    end
+  def set_clocking
+    @clocking = Clocking.find(params[:id])
+  end
 end
