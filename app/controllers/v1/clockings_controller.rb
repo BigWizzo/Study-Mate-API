@@ -1,5 +1,6 @@
 class V1::ClockingsController < ApplicationController
   before_action :set_clocking, only: [:show, :update, :destroy]
+  before_action :authenticate, only: [:create]
 
   # GET /clockings
   def index
@@ -15,8 +16,13 @@ class V1::ClockingsController < ApplicationController
 
   # POST /clockings
   def create
-    @clocking = Clocking.new(clocking_params)
-
+    @clocking = Clocking.new(
+      topic: params[:topic],
+      details: params[:details],
+      duration: params[:duration],
+      subject_id: params[:subject_id],
+      student: @student
+    )
     if @clocking.save
       render json: @clocking, status: :created
     else

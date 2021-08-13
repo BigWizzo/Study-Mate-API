@@ -1,47 +1,53 @@
 class V1::SubjectsController < ApplicationController
-  # before_action :set_subject, only: [:show, :update, :destroy]
+  before_action :set_subject, only: [:show, :update, :destroy]
+  before_action :authenticate, only: [:index, :create, :show, :update, :destroy]
 
   # GET /subjects
   def index
-    @subjects = Subject.all
+    @subjects = @student.subjects
 
     render json: @subjects
   end
 
   # GET /subjects/1
   def show
-    render json: @subject
+    byebug
+    if @subject.student_id == @student.id
+    @clockings = @subject.clockings.includes(:student)
+    render json: @clockings      
+    else
+      render json: {message: "unauthorized"}
+    end
   end
 
   # POST /subjects
   def create
-    authorization_header = request.headers[:authorization]
-    if !authorization_header
-      render status: :unauthorized
+    @subject = Subject.new(
+      title: params[:title],
+      description: params[:description],
+      student: @student
+    )
+    if @subject.save
+      render json: @subject, status: :created
     else
-      token = authorization_header.split(" ")[1]
-      secret_key = Rails.application.secrets.secret_key_base[0]
-      decode_token = JWT.decode(token, secret_key)
-      student = Student.find(decode_token[0]["student_id"])
-      @subject = Subject.create(
-        title: params[:title],
-        description: params[:description],
-        student: student
-      )
-      if @subject.save
-        render json: @subject, status: :created
-      else
-        render json: @subject.errors, status: :unprocessable_entity
-      end
+      render json: @subject.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /subjects/1
   def update
-    if @subject.update(subject_params)
-      render json: @subject
+    if @subject.student_id == @student.id
+      if @subject.update(
+        title: params[:title],
+        description: params[:description],
+        student: @student
+      )
+        render json: @subject
+      else
+        render json: @subject.errors, status: :unprocessable_entity
+      end
     else
-      render json: @subject.errors, status: :unprocessable_entity
+      render json: {message: "unauthorized"}
     end
   end
 
