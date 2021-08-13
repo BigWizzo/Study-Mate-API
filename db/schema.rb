@@ -19,8 +19,12 @@ ActiveRecord::Schema.define(version: 2021_08_11_153424) do
     t.string "topic"
     t.string "details"
     t.integer "duration"
+    t.bigint "student_id"
+    t.bigint "subject_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_clockings_on_student_id"
+    t.index ["subject_id"], name: "index_clockings_on_subject_id"
   end
 
   create_table "students", force: :cascade do |t|
@@ -33,8 +37,13 @@ ActiveRecord::Schema.define(version: 2021_08_11_153424) do
   create_table "subjects", force: :cascade do |t|
     t.string "title"
     t.string "description"
+    t.bigint "student_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_subjects_on_student_id"
   end
 
+  add_foreign_key "clockings", "students"
+  add_foreign_key "clockings", "subjects"
+  add_foreign_key "subjects", "students"
 end

@@ -15,11 +15,22 @@ class V1::SubjectsController < ApplicationController
 
   # POST /subjects
   def create
-    @subject = Subject.new(subject_params)
-    if @subject.save
-      render json: @subject, status: :created
+    authorization_header = request.headers[:authorization]
+    if !authorization_header
+      render status: :unauthorized
     else
-      render json: @subject.errors, status: :unprocessable_entity
+      token = authorization_header.split(" ")[1]
+      secret_key = Rails.application.secrets.secret_key_base[0]
+      decode_token = JWT.decode(token, secret_key)
+      byebug
+      student = Student.find(decode_token[0]["student_id"])
+
+      @subject = Subject.new(subject_params)
+      if @subject.save
+        render json: @subject, status: :created
+      else
+        render json: @subject.errors, status: :unprocessable_entity
+      end
     end
   end
 
