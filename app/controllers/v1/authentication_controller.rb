@@ -11,7 +11,7 @@ class V1::AuthenticationController < ApplicationController
           student_id: student.id,
           username: student.username,
         }, secret_key)
-        render json: {token: token}
+        render json: {token: token, student: student, message: "Logged in successfully"}
       else
         render json: {message: "wrong password"}
       end
