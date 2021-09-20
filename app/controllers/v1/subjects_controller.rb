@@ -1,6 +1,6 @@
 class V1::SubjectsController < ApplicationController
   before_action :set_subject, only: [:show, :update, :destroy]
-  before_action :authenticate, only: [:index, :create, :show, :update, :destroy]
+  before_action :authenticate, only: [:index, :create, :show]
 
   def index
     @subjects = @student.subjects
@@ -26,30 +26,6 @@ class V1::SubjectsController < ApplicationController
       render json: @subject, status: :created
     else
       render json: @subject.errors, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    if @subject.student_id == @student.id
-      if @subject.update(
-        title: params[:title],
-        description: params[:description],
-        student: @student
-      )
-        render json: @subject
-      else
-        render json: @subject.errors, status: :unprocessable_entity
-      end
-    else
-      render json: {message: "unauthorized"}
-    end
-  end
-
-  def destroy
-    if @subject.student_id == @student.id
-     @subject.destroy
-    else
-      render json: {message: "unauthorized"}
     end
   end
 
