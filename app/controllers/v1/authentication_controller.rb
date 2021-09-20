@@ -6,7 +6,7 @@ class V1::AuthenticationController < ApplicationController
       render({ json: { error: "Invalid username" }, status: :unauthorized}) 
     else
       if student.authenticate(params[:password])
-        secret_key = Rails.application.secrets.secret_key_base[0]
+        secret_key = Rails.application.secret_key_base[0]
         token = JWT.encode({
           student_id: student.id,
           username: student.username,
