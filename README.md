@@ -1,4 +1,4 @@
-# Ruby on Rails Group our transactions app
+# Ruby on Rails Study Mate
 
 > This application helps students clock in their studies based on their subjects. They can track the number of hours they spend studying a specific subject.
 > The app allows students to clock in their non-academic activities as well.
@@ -88,7 +88,6 @@ Give a ⭐️ if you like this project!
 - Microverse
 - Stand up Team
 - TSEs
-- Web Cruch
 
 ## 📝 License
 
