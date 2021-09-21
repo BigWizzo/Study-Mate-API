@@ -1,12 +1,12 @@
 class V1::ClockingsController < ApplicationController
-  before_action :set_clocking, only: [:show, :update, :destroy]
-  before_action :authenticate, only: [:create, :show, :update, :destroy]
+  before_action :set_clocking, only: %i[show update destroy]
+  before_action :authenticate, only: %i[create show update destroy]
 
   def show
     if @clocking.student_id == @student.id
       render json: @clocking
     else
-      render json: {message: "unauthorized"}
+      render json: { message: 'unauthorized' }
     end
   end
 
@@ -39,7 +39,7 @@ class V1::ClockingsController < ApplicationController
         render json: @clocking.errors, status: :unprocessable_entity
       end
     else
-      render json: {message: "unauthorized"}
+      render json: { message: 'unauthorized' }
     end
   end
 
@@ -47,7 +47,7 @@ class V1::ClockingsController < ApplicationController
     if @clocking.student_id == @student.id
       @clocking.destroy
     else
-      render json: {message: "unauthorized"}
+      render json: { message: 'unauthorized' }
     end
   end
 

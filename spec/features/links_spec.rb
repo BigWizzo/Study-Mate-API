@@ -11,8 +11,7 @@ RSpec.describe 'Test navigation links' do
   end
 
   it 'Should not send student to the clockings page' do
-  visit v1_subjects_path
-  expect(current_path).not_to eql(v1_clockings_path)
-end
-
+    visit v1_subjects_path
+    expect(current_path).not_to eql(v1_clockings_path)
+  end
 end

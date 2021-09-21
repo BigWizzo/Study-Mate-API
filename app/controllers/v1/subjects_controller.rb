@@ -1,6 +1,6 @@
 class V1::SubjectsController < ApplicationController
-  before_action :set_subject, only: [:show, :update, :destroy]
-  before_action :authenticate, only: [:index, :create, :show]
+  before_action :set_subject, only: %i[show update destroy]
+  before_action :authenticate, only: %i[index create show]
 
   def index
     @subjects = @student.subjects
@@ -10,9 +10,9 @@ class V1::SubjectsController < ApplicationController
   def show
     if @subject.student_id == @student.id
       @clockings = @subject.clockings.includes(:student)
-      render json: @clockings      
+      render json: @clockings
     else
-      render json: {message: "unauthorized"}
+      render json: { message: 'unauthorized' }
     end
   end
 
@@ -34,5 +34,4 @@ class V1::SubjectsController < ApplicationController
   def set_subject
     @subject = Subject.find(params[:id])
   end
-
 end
