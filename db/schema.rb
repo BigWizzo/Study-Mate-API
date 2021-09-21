@@ -10,9 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_09_18_184159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "clockings", force: :cascade do |t|
+    t.string "topic"
+    t.string "details"
+    t.integer "duration"
+    t.bigint "student_id"
+    t.bigint "subject_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_clockings_on_student_id"
+    t.index ["subject_id"], name: "index_clockings_on_subject_id"
+  end
+
+  create_table "students", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "subjects", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.bigint "student_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["student_id"], name: "index_subjects_on_student_id"
+  end
+
+  add_foreign_key "clockings", "students"
+  add_foreign_key "clockings", "subjects"
+  add_foreign_key "subjects", "students"
 end
